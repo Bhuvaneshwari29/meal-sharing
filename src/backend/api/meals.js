@@ -8,7 +8,7 @@ router.get("/", async (request, response) => {
 
     
     if('maxPrice' in request.query){
-      const maxPrice = request.query.maxPrice;
+      const maxPrice = Number(request.query.maxPrice);
       const highPriceMeals = await knex ('meal').where ('price', '<=', maxPrice);
       response.send(highPriceMeals);
       return;
@@ -28,7 +28,7 @@ router.get("/", async (request, response) => {
       return;
     }
     if('createdAfter' in request.query){
-      const createdAfter = request.query.createdAfter;
+      const createdAfter = Date.parse(request.query.createdAfter);
       const dateCreatedAfter = await knex('meal').where('created_date', '>=',createdAfter);
       response.send(dateCreatedAfter);
     }
@@ -58,7 +58,7 @@ router.get('/:id', async (req,res) =>{
   try {
     const mealId = req.params.id;
     const requestedMeal = await knex('meal').where ('id',mealId);
-    res.send(requestedMeal[0]);
+    res.send(requestedMeal);
   }catch (error){
     throw error;
   }
